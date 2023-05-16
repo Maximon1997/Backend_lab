@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:3000/books/create" method="POST" onsubmit="goTooStart(2)">
+        <label for="title">Title</label>
+        <input type="text" placeholder="Enter title" name="Title" />
+        <br>
+        <label for="author">Author</label>
+        <input type="text" placeholder="Enter author" name="Author" />
+        <br>
+        <label for="genre">Genre</label>
+        <input type="text" placeholder="Enter genre" name="genre" />
+        <br>
+        <label for="releaseYear">Release Year</label>
+        <input
+            type="number"
+            placeholder="Enter release year"
+            name="releaseYear"
+        />
+        <br>
+        <label for="available">Available</label>
+        <input type="number" name="available" />
+        <br>
+        <label for="borrowed">Borrowed</label>
+        <input type="number" name="borrowed" />
+        <br>
+        <button type="submit">Add Book</button>
+    </form>
+<button onclick="goTooStart(1)">Go back</button>
+    <script>
+        function goTooStart(num) {
+            if (num === 2){
+                setTimeout(function() {
+                window.location.href = "index.html";
+            }, 500);
+            }
+            else{
+                window.location.href = "index.html"
+            }
+
+        }
+    </script>
+
+</body>
+</html>

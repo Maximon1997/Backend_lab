@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Book Form</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <h1>Book Form</h1>
+
+        <label for="bookId">Select Book ID:</label>
+        <select id="bookId">
+            <option value="">Select an ID</option>
+        </select>
+
+        <br />
+        <label for="title">Title</label>
+        <input type="text" placeholder="Enter title" name="Title" />
+        <br />
+        <label for="author">Author</label>
+        <input type="text" placeholder="Enter author" name="Author" />
+        <br />
+        <label for="genre">Genre</label>
+        <input type="text" placeholder="Enter genre" name="genre" />
+        <br />
+        <label for="releaseYear">Release Year</label>
+        <input
+            type="number"
+            placeholder="Enter release year"
+            name="releaseYear"
+        />
+        <br />
+        <label for="available">Available</label>
+        <input type="number" name="available" />
+        <br />
+        <label for="borrowed">Borrowed</label>
+        <input type="number" name="borrowed" />
+        <br />
+
+        <button id="btnedit" disabled>Edit</button
+        ><button id="btndelete">Delete</button>
+        <br />
+        <button onclick="goTooStart(1)">Go back</button>
+        <script>
+            const buttonedit = document.querySelector('#btnedit')
+            const buttondelete = document.querySelector('#btndelete')
+
+            function checkForm() {
+                const inputs = document.querySelectorAll('input[name]')
+                for (let i = 0; i < inputs.length; i++) {
+                    if (inputs[i].value === '') {
+                        return false
+                    }
+                }
+                return true
+            }
+
+            function toggleEditButton() { 
+                buttonedit.disabled = !checkForm()
+            }
+
+            const inputFields = document.querySelectorAll('input[name]')
+            for (let i = 0; i < inputFields.length; i++) {
+                inputFields[i].addEventListener('input', toggleEditButton)
+            }
+
+            buttondelete.addEventListener('click', () => {
+                let bookIdSelect = document.querySelector('#bookId')
+                let bookId =
+                    bookIdSelect.options[bookIdSelect.selectedIndex].value
+
+                fetch(`http://localhost:3000/books/remove?id=${bookId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then((data) => {
+                        console.log(data)
+                    })
+                goTooStart(2)
+            })
+
+            buttonedit.addEventListener('click', () => {
+                const bookIdSelect = document.querySelector('#bookId')
+                const bookId =
+                    bookIdSelect.options[bookIdSelect.selectedIndex].value
+
+                const Title = document.querySelector('input[name="Title"]')
+                const Author = document.querySelector('input[name="Author"]')
+                const genre = document.querySelector('input[name="genre"]')
+                const releaseYear = document.querySelector(
+                    'input[name="releaseYear"]'
+                )
+                const available = document.querySelector(
+                    'input[name="available"]'
+                )
+                const borrowed = document.querySelector(
+                    'input[name="borrowed"]'
+                )
+
+                const updatedBook = {
+                    id: bookId,
+                    Title: Title.value,
+                    Author: Author.value,
+                    genre: genre.value,
+                    releaseYear: parseInt(releaseYear.value),
+                    available: parseInt(available.value),
+                    borrowed: parseInt(borrowed.value)
+                }
+
+                const options = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedBook)
+                }
+
+                fetch('http://localhost:3000/books/edit', options)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data)
+                    })
+                goTooStart(2)
+            })
+
+            function goTooStart(num) {
+                if (num === 2) {
+                    setTimeout(function () {
+                        window.location.href = 'index.html'
+                    }, 500)
+                } else {
+                    window.location.href = 'index.html'
+                }
+            }
+        </script>
+
+        <script src="edit.js"></script>
+    </body>
+</html>
